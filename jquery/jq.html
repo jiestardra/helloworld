@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8">
+	<title>锋利的jq</title>
+	<script src="js/jquery-2.1.4.js"></script>
+	<style type="text/css">
+		ul{}
+		li{list-style: none;}
+		.item{}
+		.mv{width: 50px;height: 50px;background-color:red;margin: 5px;list-style: none;}
+		.box{width: 200px;height: 500px;background-color: #333333;}
+
+		.choose{clear: both;}
+
+		.ts{width: 100%;}
+		.ts ul li{float: left;margin: 5px;}
+		.ts ul li img{width: 50px;}
+		#tstitle{position: absolute;}
+		/*时间冒泡*/
+		.maopao {width:600px;height:400px;background-color:#CC6666;display: block;}
+		.maopao .am{width: 400px;height: 200px;margin: 100px; background-color:#660099;}
+		.maopao .am .bm{width: 300px;height: 100px;margin: 50px; background-color:#6699FF;}
+		.maopao .am .bm span{width: 200px;height: 50px;margin: 25px; background-color:#66FFCC;display: inline-block;}
+
+		.show{height: 200px;}
+
+		.animate{}
+		.animate .panl{width: 100px;height: 100px;background-color: red;position: relative;}
+		.form{clear: both;}
+		.form label{}
+		.form input{margin: 5px;}
+		.form textarea{margin: 5px;}
+		.form textarea:focus , .form input:focus{border:1px solid #f00;background-color: #fcc;}
+
+	</style>
+</head>
+<body>
+
+	<!--放大缩小-->
+	<div class="big-small">
+		<div><span style="width: 60px;height: 40px;display: inline-block;">放大</span><span style="width: 60px;height: 40px;display: inline-block;">缩小</span> </div>
+		<p>This is some text!This is some text!This is some text!</p>
+		<p>This is some text!This is some text!This is some text!</p>
+		<p>This is some text!This is some text!This is some text!</p>
+		<p>This is some text!This is some text!This is some text!</p>
+		<p>This is some text!This is some text!This is some text!</p>
+
+	</div>
+
+	<script>
+		(function($){
+			$('span','.big-small').on('click',function(){
+				var nowSize = $('p','.big-small').css('font-size');
+				var intSize = parseFloat(nowSize,10);
+				var unit = nowSize.slice(-2);
+				var thisContent = $(this).text();
+				if(thisContent=='放大'&&intSize<=32){
+					intSize+=2;
+				}else if(thisContent=='缩小'&&intSize>=10){
+					intSize-=2;
+				}
+				$('p','.big-small').css('font-size',intSize+unit);
+
+			});
+		})(jQuery);
+	</script>
+
+	<!--  表单应用 -->
+	<div class="biaodan">
+		<form action="">
+		<div class="int"><label for="">用户名：<input type="text" class="require"></label></div>
+		<div class="int"><label for="">密码：<input type="password" class="require"></label></div>
+		<div class="int"><label for="">邮箱：<input type="text" class=""></label></div>
+		<div class="sub"><label for=""><input type="submit" value="提交"></label><input type="reset" value="重置"></label></div>
+		</form>
+
+	</div>
+
+	<script type="text/javascript">
+		(function($){
+			var req = '*';
+			$('input.require','.biaodan').parent().append('<span style="color:red;">*<span>');
+			$(':input','.biaodan').on('blur',function(){
+
+			});
+
+		})(jQuery);
+
+	</script>
+
+	<!--  下拉框应用 -->
+	<div class="select">
+		<label for="">登录账户：<input type="text"></label>
+		<label for="">登录密码：<input type="password"></label>
+		<label for="">主持人名：<input type="text"></label><br><br>
+		<div style="width: 100px;float: left;">负责频道：</div>
+		<div style="width: 100px;float: left;"><select multiple="multiple" name="" id="s1" style="width: 100px;height:300px;">
+						<option value="1">美丽人生</option>
+						<option value="2">心花路放</option>
+						<option value="3">春眠不觉</option>
+						<option value="3">时尚女人</option>
+						<option value="4">音乐故事</option>
+						<option value="5">谈笑风声</option>
+						<option value="6">音乐故事</option>
+				  </select>
+		</div>
+		<div style="width: 100px;float: left">
+			<span id="right">选中到右边</span><br>
+			<span id="allright">全到右边</span><br>
+			<span id="left">选中到左边</span><br>
+			<span id="allleft">全到左边</span>
+		</div>
+		<div style="width: 100px;height: 300px;float: left;">
+			<select  multiple="" name="" id="s2" style="width: 100px;height: 300px;">	
+			</select>	
+		</div>
+	</div>
+	<script>
+		(function($){
+			$('#right').on('click',function(){
+				$('option:selected','#s1').appendTo($('#s2'));
+			});//添加到右边
+			$('#allright').on('click',function(){
+				$('option','#s1').appendTo($('#s2'));
+			});//全部添加到右边
+			$('#left').on('click',function(){
+				$('option:selected','#s2').appendTo($('#s1'));
+			});//添加到左边
+			$('#allleft').on('click',function(){
+				$('option','#s2').appendTo($('#s1'));
+			});//全部添加到左边
+			//双击
+			$('s1').dblclick
+		})(jQuery);
+
+	</script>
+
+
+
+	<!--  表单 -->
+	<div class="form">
+		<fieldset>
+			<legend>基本信息</legend>
+			<div>
+				<label for="">姓名：<input type="text"></label><br>
+				<label for="">密码：<input type="password"></label><br>
+				<label for="">详细：<textarea></textarea></label>
+			</div>
+		</fieldset>
+		兴趣爱好：
+		<label for=""><input type="checkbox" name="checkbox" value="足球">足球</label>
+		<label for=""><input type="checkbox" name="checkbox" value="篮球">篮球</label>
+		<label for=""><input type="checkbox" name="checkbox" value="排球">排球</label>
+		<label for=""><input type="checkbox" name="checkbox" value="羽毛球">羽毛球</label>
+		<label for=""><input type="button" id="checkall" value="全选"></label>
+		<label for=""><input type="button" id="checknone" value="不选"></label>
+		<label for=""><input type="button" id="recheck" value="反选"></label>
+		<label for=""><input type="checkbox" name="all" value="全选/全不选" checked>全选/全不选</label>
+
+	</div>
+	
+	<script>
+		(function(){
+			//全选
+			$('#checkall').on('click.checkall',function(){
+				$('.form input[name="checkbox"]').prop('checked',true);
+				var k = $('.form input[name="checkbox"]').prop('checked');
+				$('input[name="all"]').prop('checked',true);
+			});
+			//全不选			
+			$('#checknone').on('click.checknone',function(){
+				//$('.form input[name="checkbox"]').prop('checked',false);
+				$('.form input[name="checkbox"]').each(function(){this.checked=false;});
+				$('input[name="all"]').prop('checked',false);
+			});
+			//$('input[name="all"]')[0].checked = true?$('#checkall').trigger('.checkall'):$('#checknone').trigger('.checknone');
+			//全选/反选  联动
+			$('input[name="all"]').on('click',function(){
+				//(this.checked == true)?$('#checkall').trigger('click'):$('#checknone').trigger('click');
+				var k = 0;
+				var len = $('input[name="checkbox"]','.form').length;
+				$('input[name="checkbox"]','.form').each(function(){
+					if(this.checked){k++;}
+				});
+				k<len?$('input[name="checkbox"]','.form').prop('checked',true):$('input[name="checkbox"]','.form').prop('checked',false);
+				
+			});
+			//反选
+			$('#recheck').on('click',function(){
+				var i = 0;
+				$('.form input[name="checkbox"]').each(function(){
+					//$(this).prop('checked')?$(this).prop('checked',false):$(this).prop('checked',true);
+					//$(this).prop('checked',!$(this).prop('checked'));
+					this.checked=!this.checked;
+					if (this.checked) {i++;}
+				});
+				if (i<$('.form input[name="checkbox"]').length) {
+					$('input[name="all"]').prop('checked',false);
+				}else{
+					$('input[name="all"]').prop('checked',true);
+				}
+			});
+		})(jQuery);
+	</script>
+
+
+	<!-- animate自定义动画 -->
+	<div class="animate">
+		<div class="panl"></div>
+	</div>
+	<script type="text/javascript">
+		$('.animate .panl').on('click',mk = function(){$(this).animate({left:'300px',height:'200px'},3000,function(){$(this).animate({left:'0px',height:'100px'},4000,mk)})}).on('mouseover',function(){$(this).stop()}).on('mouseout',function(){$(this).mk})
+
+
+	</script>
+
+	<!-- 动画 -->
+	<div class="show">
+		<h5>	显示中的条目</h5>
+		<p><h4>标题</h4><div class="content">这是文章内容</div></p>
+	</div>
+	<script type="text/javascript">
+		(function($){
+
+			$('h4','.show').on('click',function(){
+				$('.content','.show').toggle('slow');
+			});
+			//$('p h5','.show').toggle(function(){$(this).next('.content').fadeOut()},function(){$(this).next('.content').fadeIn()})
+
+		})(jQuery);
+
+
+	</script>
+
+	<!-- 时间冒泡 -->
+	<div class="maopao">
+	jj
+		<div class="am">
+				外层部分
+			<div class="bm">
+				中间部分660099
+				<span>最里城</span>
+			</div>
+		</div>
+	</div>
+
+	<form action="http://www.baidu.com">
+		用户名：<input type="text" id="uname">
+		<input type="submit" value="提交" id="submit">
+		<button class="">按钮</button>
+	</form>
+	<script type="text/javascript">
+
+		(function($){
+			
+
+			$('#submit').on('click.ok',function(event){
+			var username = $('#uname').val();
+			if(username==''){
+				alert('填写用户名');
+				event.preventDefault();
+			}
+
+			});
+			
+			$('body').on('click',function(e){
+				//alert(e.metaKey);
+				// $('#submit').unbind('.ok');//取消绑定事件
+			});
+
+
+			$('.maopao').on('click',function(event){
+				//alert('.maopao');
+				var k = event.target;
+				//alert(k);
+
+			});			
+
+			$('.am').on('click',function(event){
+				alert('这是am');
+				event.stopPropagation();
+			});			
+
+			$('.bm').on('click',function(event){
+				alert('中间部分');
+				event.stopPropagation();
+			});	
+			$('.bm').on('click.hok',function(event){
+				alert('中间部分');
+				event.stopPropagation();
+			});	
+
+
+
+			//$('.bm').triggerHandler('click');	
+
+			$('span','.maopao').one('click',function(event){
+				alert('最里面');
+				event.stopPropagation();
+			});			
+
+		})(jQuery);
+
+
+	</script>
+
+
+	<!-- 自定义提示 -->
+	<div class="ts">
+		<ul>
+			<li><img src="./img/p1.png" title="这是第一张照片"></li>
+			<li><img src="./img/p2.png" title="这是第二张照片"></li>
+			<li><img src="./img/p3.png" title="这是第三张照片"></li>
+			<li><img src="./img/p4.png" title="这是第四张照片"></li>
+			<li><img src="./img/p5.png" title="这是第五张照片"></li>
+			<li><img src="./img/p6.png" title="这是第六张照片"></li>
+		</ul>
+	</div>
+<script>
+	(function($){
+		var li = $('li','.ts ul');
+
+		li.on('mouseover',function(e){
+			var title = $(this).children().attr('title');
+			$(this).children().attr('');
+			var ts = '<div id="tstitle">'+title+'<div/>'
+			$('body').append(ts);
+			$('#tstitle').css({'top':e.pageY+'px','left':e.pageX+'px'});
+		});
+		li.on('mouseout',function(){
+			$('#tstitle').remove();
+		});
+
+
+
+	})(jQuery);
+
+
+
+</script>
+	
+
+<!-- 表单选择 -->
+
+	<div class="choose">
+		<select>
+			<option>上海</option>
+			<option>北京</option>
+			<option>武汉</option>
+			<option>荆州</option>
+			<option>南京</option>
+		</select><br />
+	<label><input type="radio" name="radio" value="上海" checked="checked" />上海</label>
+	<label><input type="radio" name="radio" value="北京" />北京</label>
+	<label><input type="radio" name="radio" value="武汉" />武汉</label>
+	<label><input type="radio" name="radio" value="荆州" />荆州</label><br />
+	<label><input type="checkbox" name="checkbox" value="上海" />上海</label>
+	<label><input type="checkbox" name="checkbox" value="北京" />北京</label>
+	<label><input type="checkbox" name="checkbox" value="武汉"/>武汉</label>
+	<label><input type="checkbox" name="checkbox" value="荆州" />荆州</label>
+	</div>
+	<script>
+		$('select','.choose').val('荆州');
+		$(':radio').val(['荆州']);
+		$(':checkbox').val(['荆州','上海']);
+		$('select').children();
+		$(document).on('click',function(e){
+			$(e.target).closest('li').css('color','red');
+		});
+
+	</script>
+
+
+
+
+	<p><span>Hello</span>,how are you?</p>
+	<ul class="ex1">
+		<li>这是第一个</li>
+		<li>这是第二个</li>
+	</ul>
+
+	<div class="item">
+		<ul>
+			<li class="mv"></li>
+			<li class="mv"></li>
+		</ul>
+	</div>
+
+	<div class="box">
+		<p>下面放置小方块</p>
+	</div>
+
+	<script type="text/javascript">
+	//$('p','.box').replaceWith('<p>hehheh</p>');
+	$('<p>gfrt t </p>').replaceAll('.box p');
+
+		$('.mv').on('click',function(){
+			$(this).clone(true).appendTo('.box');
+			console.log('hh');
+		});
+
+		$('.p').find('span').end().css('color','red').on('click',function(){
+			$(this).hide();
+		});
+
+		var li_1='<li></li>';
+		var li_2='<li>第三个</li>';
+		$('.ex1').append(li_2).append($('li:eq(0)','.ex1'));
+		$('li:last-child','.ex1').remove();
+
+		//$('li:last-child','ul').text('这是最后一个').css('color','red');
+	</script>
+
+</body>
+</html>
